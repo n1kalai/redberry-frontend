@@ -1,0 +1,43 @@
+body {
+    background-color: #f3f4f6;
+}
+
+/* input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+} */
+
+/* input[type='date'] {
+    position: relative;
+} */
+
+/* make the native arrow invisible and stretch it over the whole field so you can click anywhere in the input field to trigger the native datepicker*/
+input[type='date']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    color: transparent;
+    background: transparent;
+}
+
+/* adjust increase/decrease button */
+input[type='date']::-webkit-inner-spin-button {
+    z-index: 1;
+}
+
+/* adjust clear button */
+input[type='date']::-webkit-clear-button {
+    z-index: 1;
+}
+
+input[type='text']::placeholder {
+    color: black;
+    opacity: 1;
+    font-size: 14px;
+    font-weight: 400;
+}
