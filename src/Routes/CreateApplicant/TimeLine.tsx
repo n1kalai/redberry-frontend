@@ -8,7 +8,7 @@ const TimelineDiv = styled(Box)({
     p: {
         color: '#808189'
     },
-    '& p:first-child': {
+    '& p:first-of-type': {
         color: '#BFC0C4'
     },
     '&::after': {
@@ -28,7 +28,7 @@ const SecTimeLineDiv = styled(Box)({
     p: {
         color: '#808189'
     },
-    '& p:first-child': {
+    '& p:first-of-type': {
         color: '#BFC0C4'
     }
 })

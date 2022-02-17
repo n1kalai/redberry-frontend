@@ -2,13 +2,8 @@ import { useState, MouseEvent, useRef } from 'react'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Grow from '@mui/material/Grow'
-import Paper from '@mui/material/Paper'
-import Popper from '@mui/material/Popper'
-import MenuItem from '@mui/material/MenuItem'
-import MenuList from '@mui/material/MenuList'
+import { Grow, Box, Paper, Popper, MenuItem, MenuList } from '@mui/material'
 import { ArrowDropDownIcon } from 'components/common/icons'
-import styled from '@emotion/styled'
 
 const options = [
     'Initial',
@@ -19,24 +14,26 @@ const options = [
     'Hired'
 ]
 
-const StyledButtonGroup = styled(ButtonGroup)({
-    '& button': { backgroundColor: '#10EF7C' }
-})
+type Props = {
+    onChange: (_: any) => void
+    value: string
+}
 
-export const StatusToggler = () => {
+export const StatusToggler = ({ onChange, value }: Props) => {
     const [open, setOpen] = useState(false)
     const anchorRef = useRef<HTMLDivElement>(null)
-    const [selectedIndex, setSelectedIndex] = useState(1)
+    const [selectedIndex, setSelectedIndex] = useState(0)
 
     const handleClick = () => {
         console.info(`You clicked ${options[selectedIndex]}`)
     }
 
     const handleMenuItemClick = (
-        event: MouseEvent<HTMLLIElement>,
+        _: MouseEvent<HTMLLIElement>,
         index: number
     ) => {
         setSelectedIndex(index)
+        onChange({ target: { value: options[index], name: 'status' } })
         setOpen(false)
     }
 
@@ -56,14 +53,22 @@ export const StatusToggler = () => {
     }
 
     return (
-        <>
-            <StyledButtonGroup
+        <Box
+            py={3}
+            px={6}
+            borderBottom="dashed 1px lightgray"
+            borderRight="dashed 1px lightgray"
+            height="40px"
+        >
+            <ButtonGroup
                 variant="contained"
                 ref={anchorRef}
                 aria-label="split button"
-                color="inherit"
+                color="success"
             >
-                <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+                <Button style={{ fontFamily: 'Inter' }} onClick={handleClick}>
+                    {value}
+                </Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -74,7 +79,7 @@ export const StatusToggler = () => {
                 >
                     <ArrowDropDownIcon />
                 </Button>
-            </StyledButtonGroup>
+            </ButtonGroup>
             <Popper
                 open={open}
                 anchorEl={anchorRef.current}
@@ -115,6 +120,6 @@ export const StatusToggler = () => {
                     </Grow>
                 )}
             </Popper>
-        </>
+        </Box>
     )
 }

@@ -7,7 +7,7 @@ const WrapperBox = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
     paddingTop: 24,
-    '& h6:first-child': {
+    '& h6:first-of-type': {
         paddingLeft: 25,
         fontStyle: 'italic'
     },
@@ -15,7 +15,7 @@ const WrapperBox = styled(Box)({
         fontWeight: 'bold',
         marginTop: 12
     },
-    '& h6:nth-child(3)': {
+    '& h6:nth-of-type(2)': {
         background: '#F6F6F7',
         paddingLeft: 30,
         paddingBlock: 6,
