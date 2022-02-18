@@ -1,7 +1,10 @@
 import { memo } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
+import { ArrowDropDownIcon } from 'components/common/icons'
+import { useNavigate } from 'react-router-dom'
 
 export const Header = memo(() => {
+    const navigate = useNavigate()
     return (
         <Box
             component="header"
@@ -11,6 +14,18 @@ export const Header = memo(() => {
             px={6}
             py={3}
         >
+            <IconButton
+                title="Back"
+                onClick={() => navigate(-1)}
+                style={{
+                    transform: 'rotate(90deg)',
+                    position: 'absolute',
+                    left: 8,
+                    top: 32
+                }}
+            >
+                <ArrowDropDownIcon />
+            </IconButton>
             <Typography
                 variant="h4"
                 style={{

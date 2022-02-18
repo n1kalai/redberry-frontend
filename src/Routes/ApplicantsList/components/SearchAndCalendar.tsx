@@ -4,9 +4,13 @@ import { ChangeEvent } from 'react'
 
 type Props = {
     handleSearch: (_: ChangeEvent<HTMLInputElement>) => void
+    handleDateChange: (_: ChangeEvent<HTMLInputElement>) => void
 }
 
-export const SearchAndCalendar = ({ handleSearch }: Props) => {
+export const SearchAndCalendar = ({
+    handleSearch,
+    handleDateChange
+}: Props) => {
     return (
         <Box display="flex" mt={5}>
             <Box width="82%" pr={3}>
@@ -24,7 +28,7 @@ export const SearchAndCalendar = ({ handleSearch }: Props) => {
                 />
             </Box>
             <Box flex="1">
-                <DatePicker />
+                <DatePicker handleDateChange={handleDateChange} />
             </Box>
         </Box>
     )

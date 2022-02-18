@@ -25,6 +25,7 @@ export const UserInfoForm = () => {
         status: 'Initial',
         cv: null
     })
+
     const [newApplicant, setNewApplicant] = useState({
         open: false,
         loading: false,

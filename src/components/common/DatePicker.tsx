@@ -1,42 +1,20 @@
 import styled from '@emotion/styled'
 import { Box, TextField, InputAdornment, Typography } from '@mui/material'
+import { ChangeEvent } from 'react'
 import { CalendarIcon } from './icons'
+
 const StyledInput = styled('input')({
     background: 'transparent',
     border: 'none',
     outline: 'none'
-    // width: 92
 })
 
-export const DatePicker = () => {
+type Props = {
+    handleDateChange: (_: ChangeEvent<HTMLInputElement>) => void
+}
+
+export const DatePicker = ({ handleDateChange }: Props) => {
     return (
-        // <Box>
-        //     <TextField
-        //         // placeholder="to"
-        //         InputProps={{
-        //             style: { backgroundColor: 'white' },
-        //             placeholder: 'to',
-        //             startAdornment: (
-        //                 <InputAdornment position="start" component="div">
-        //                     <StyledInput
-        //                         type="date"
-        //                         onClick={e => {
-        //                             console.log(e)
-        //                         }}
-        //                     />
-        //                 </InputAdornment>
-        //             ),
-        //             endAdornment: (
-        //                 <InputAdornment position="start" component="div">
-        //                     <StyledInput
-        //                         type="date"
-        //                         style={{ marginRight: -25 }}
-        //                     />
-        //                 </InputAdornment>
-        //             )
-        //         }}
-        //     />
-        // </Box>
         <Box>
             <TextField
                 // placeholder="to"
@@ -53,14 +31,15 @@ export const DatePicker = () => {
                                 <StyledInput
                                     type="date"
                                     style={{ textAlign: 'left' }}
+                                    name="startDate"
+                                    onChange={handleDateChange}
                                 />
                                 <Typography variant="body2">to</Typography>
                                 <StyledInput
                                     type="date"
+                                    name="endDate"
                                     style={{ textAlign: 'right' }}
-                                    onClick={e => {
-                                        console.log(e)
-                                    }}
+                                    onChange={handleDateChange}
                                 />
                             </InputAdornment>
                         </Box>

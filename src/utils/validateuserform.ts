@@ -54,7 +54,7 @@ export const validate = (values: Applicant) => {
         errors.status = 'Status is required'
     }
     if (!cv) {
-        errors.cv = 'Cv is required'
+        errors.cv = { path: 'Cv is required' }
     }
 
     return errors

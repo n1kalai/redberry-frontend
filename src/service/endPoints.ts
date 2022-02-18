@@ -25,4 +25,42 @@ const getStatusCounts = () => {
         baseAPI.get('/applicants/status-count')
     )
 }
-export { createApplicant, getAllApplicants, getStatusCounts, getApplicant }
+
+const handleFieldUpdate = async (
+    data: {
+        fieldName: string
+        fieldValue: string
+        applicantId: string | undefined
+        type: string
+    },
+    refetch: Function
+) => {
+    await baseAPI.post('/applicants/update', data)
+    refetch()
+}
+
+const addCommentToUpdate = async (
+    data: { updateId: string; comment: string },
+    refetch: Function
+) => {
+    await baseAPI.post('/updates/add-comment', data)
+    refetch()
+}
+
+const getApplicantsByDate = (data: {
+    startDate: string | null
+    endDate: string | null
+}) => {
+    return useQuery(`byDate-${data.startDate}-${data.endDate}`, () =>
+        baseAPI.post('/applicants/by-date', data)
+    )
+}
+export {
+    createApplicant,
+    getAllApplicants,
+    getStatusCounts,
+    getApplicant,
+    handleFieldUpdate,
+    getApplicantsByDate,
+    addCommentToUpdate
+}

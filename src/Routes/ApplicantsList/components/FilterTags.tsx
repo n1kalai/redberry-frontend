@@ -37,12 +37,14 @@ type TagType = keyof typeof tags
 
 type Props = {
     setFilteredByStatus: (_: string) => void
+    setDates: Function
     filteredByStatus: string | undefined
 }
 
 export const FilterTags = ({
     setFilteredByStatus,
-    filteredByStatus
+    filteredByStatus,
+    setDates
 }: Props) => {
     const { isLoading, isError, data } = getStatusCounts()
     if (isLoading) return <LinearProgress />
@@ -52,9 +54,10 @@ export const FilterTags = ({
             <WrapperBox component="ul" display="flex">
                 {Object.keys(tags).map(tag => (
                     <Box
-                        onClick={() =>
+                        onClick={() => {
                             setFilteredByStatus(tags[tag as TagType])
-                        }
+                            setDates({ startDate: null, endDate: null })
+                        }}
                         component="li"
                         key={tag}
                         display="flex"

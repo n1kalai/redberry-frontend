@@ -39,7 +39,7 @@ export const TableCell = memo(({ data }: Props) => {
         skills,
         status,
         position,
-        pdf,
+        cv,
         id
     } = data
 
@@ -104,8 +104,8 @@ export const TableCell = memo(({ data }: Props) => {
                 />
                 <IconButton
                     onClick={e => {
-                        e.preventDefault()
-                        window.open(pdf?.path, '_blank')
+                        e.stopPropagation()
+                        window.open(cv?.path, '_blank')
                     }}
                 >
                     <PDFIcon />

@@ -7,7 +7,9 @@ type ApplicantCredientals = {
     updatedAt?: Date
     pdf: {
         path: string
+        name: string
     }
+    updates: any[]
 }
 
 export type Applicant = Partial<ApplicantCredientals> & {
@@ -19,6 +21,8 @@ export type Applicant = Partial<ApplicantCredientals> & {
     experience: string
     linkedInURL: string
     status: string
-    cv: File | null | string
+    cv: null | {
+        path: string
+    }
     skills: string[] | string
 }

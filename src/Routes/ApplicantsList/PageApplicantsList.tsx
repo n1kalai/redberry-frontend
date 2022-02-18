@@ -18,6 +18,23 @@ const PageApplicantsList = () => {
         undefined | string
     >('All')
 
+    const [dates, setDates] = useState<{
+        startDate: string | null
+        endDate: string | null
+    }>({ startDate: null, endDate: null })
+
+    const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const {
+            target: { value, name }
+        } = e
+        setDates(p => ({
+            ...p,
+            [name]: new Date(value).toISOString()
+        }))
+
+        e.target.blur()
+    }
+
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const {
             target: { value }
@@ -33,14 +50,19 @@ const PageApplicantsList = () => {
     return (
         <Box display="flex" flexDirection="column" p={3}>
             <Header />
-            <SearchAndCalendar handleSearch={handleSearch} />
+            <SearchAndCalendar
+                handleSearch={handleSearch}
+                handleDateChange={handleDateChange}
+            />
             <FilterTags
                 filteredByStatus={filteredByStatus}
                 setFilteredByStatus={setFilteredByStatus}
+                setDates={setDates}
             />
             <ApplicantsTable
                 filteredByStatus={filteredByStatus}
                 searchedData={searchedData}
+                dates={dates}
             />
         </Box>
     )

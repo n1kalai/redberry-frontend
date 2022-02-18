@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getApplicant } from 'service/endPoints'
+import { getApplicant, handleFieldUpdate } from 'service/endPoints'
 
 import { Formik } from 'formik'
 import { Box, Snackbar } from '@mui/material'
@@ -14,7 +14,7 @@ import { validate } from 'utils/validateuserform'
 
 export const UserEditForm = () => {
     const { id } = useParams()
-    const { data } = getApplicant(id)
+    const { data, refetch } = getApplicant(id)
 
     const { skills, firstName, lastName, pdf, ...rest } = data?.data || {
         fullName: '',
@@ -35,6 +35,21 @@ export const UserEditForm = () => {
         loading: false,
         text: ''
     })
+
+    const handleUpdate = async (fieldName: string, fieldValue: string) => {
+        const data = {
+            fieldName,
+            fieldValue,
+            applicantId: id,
+            type: fieldName
+        }
+        handleFieldUpdate(data, refetch)
+    }
+
+    function handleStatusChange(callback: Function, a: ChangeEvent<any>) {
+        callback(a)
+        handleUpdate('status', a.target.value)
+    }
 
     return (
         <Formik
@@ -65,7 +80,7 @@ export const UserEditForm = () => {
                         }}
                     />
                     <StatusToggler
-                        onChange={handleChange}
+                        onChange={a => handleStatusChange(handleChange, a)}
                         value={values.status}
                     />
                     <Box py={2} px={6}>
@@ -87,6 +102,9 @@ export const UserEditForm = () => {
                             touched={touched.email}
                             error={errors.email}
                             onBlur={handleBlur}
+                            onFiledUpdate={() =>
+                                handleUpdate('email', values.email)
+                            }
                             isEditing
                         />
                         <MyInput
@@ -97,6 +115,9 @@ export const UserEditForm = () => {
                             touched={touched.phone}
                             error={errors.phone}
                             onBlur={handleBlur}
+                            onFiledUpdate={() =>
+                                handleUpdate('phone', values.phone)
+                            }
                             isEditing
                         />
                         <MyInput
@@ -107,6 +128,9 @@ export const UserEditForm = () => {
                             touched={touched.salaryRange}
                             error={errors.salaryRange}
                             onBlur={handleBlur}
+                            onFiledUpdate={() =>
+                                handleUpdate('salaryRange', values.salaryRange)
+                            }
                             isEditing
                         />
                         <MyInput
@@ -117,6 +141,9 @@ export const UserEditForm = () => {
                             touched={touched.linkedInURL}
                             error={errors.linkedInURL}
                             onBlur={handleBlur}
+                            onFiledUpdate={() =>
+                                handleUpdate('linkedInURL', values.linkedInURL)
+                            }
                             isEditing
                         />
 
@@ -134,6 +161,9 @@ export const UserEditForm = () => {
                             touched={touched.position}
                             error={errors.position}
                             onBlur={handleBlur}
+                            onFiledUpdate={() =>
+                                handleUpdate('position', values.position)
+                            }
                             isEditing
                         />
                         <MyInput
@@ -144,12 +174,16 @@ export const UserEditForm = () => {
                             touched={touched.experience}
                             error={errors.experience}
                             onBlur={handleBlur}
+                            onFiledUpdate={() =>
+                                handleUpdate('experience', values.experience)
+                            }
+                            isEditing
                         />
                         <DropZone
                             accept="application/pdf"
                             onDrop={handleChange}
                             error={errors.pdf}
-                            hasPdf
+                            cv={values.cv}
                         />
                     </Box>
                 </Box>

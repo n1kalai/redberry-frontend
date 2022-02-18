@@ -7,7 +7,7 @@ type Props = {
     accept: string
     maxFiles?: number
     multiple?: boolean
-    hasPdf?: boolean
+    cv?: any
     onDrop: (_: { target: { name: string; value: File } }) => void
     error?: string
 }
@@ -34,7 +34,7 @@ export const DropZone = ({
     accept,
     multiple = false,
     maxFiles = 1,
-    hasPdf,
+    cv,
     onDrop,
     error
 }: Props) => {
@@ -62,7 +62,7 @@ export const DropZone = ({
             </StyledBox>
             <Typography
                 style={{
-                    color: '#BFC0C4',
+                    color: Boolean(error) ? 'red' : '#BFC0C4',
                     fontWeight: 500,
                     fontFamily: 'Inter',
                     fontStyle: 'italic',
@@ -72,56 +72,46 @@ export const DropZone = ({
             >
                 Required
             </Typography>
-            {acceptedFiles.length > 0 ||
-                (hasPdf && (
+            {(acceptedFiles.length > 0 || Boolean(cv)) && (
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    mt={2}
+                >
                     <Box
                         display="flex"
-                        flexDirection="column"
                         justifyContent="space-between"
-                        alignItems="flex-start"
-                        mt={2}
+                        width="100%"
                     >
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            width="100%"
-                        >
-                            <Box display="flex">
-                                <PDFIcon />
-                                <Typography
-                                    variant="body2"
-                                    style={{ marginLeft: 8, fontWeight: 600 }}
-                                >
-                                    {acceptedFiles[0]?.name}
-                                </Typography>
-                            </Box>
-                            <Box display="flex" alignItems="center">
-                                <Typography
-                                    variant="body2"
-                                    style={{ marginRight: 8 }}
-                                >
-                                    Done
-                                </Typography>
-                                <CloseIcon fill="red" />
-                            </Box>
+                        <Box display="flex">
+                            <PDFIcon />
+                            <Typography
+                                variant="body2"
+                                style={{ marginLeft: 8, fontWeight: 600 }}
+                            >
+                                {acceptedFiles[0]?.name || cv?.name}
+                            </Typography>
                         </Box>
-                        <Divider
-                            sx={{
-                                backgroundColor: '#10EF7C',
-                                width: '100%',
-                                marginTop: 1.5
-                            }}
-                        />
+                        <Box display="flex" alignItems="center">
+                            <Typography
+                                variant="body2"
+                                style={{ marginRight: 8 }}
+                            >
+                                Done
+                            </Typography>
+                            <CloseIcon fill="red" />
+                        </Box>
                     </Box>
-                ))}
-            {Boolean(error) && (
-                <Typography
-                    style={{ marginTop: 4 }}
-                    variant="body2"
-                    color="error"
-                >
-                    {error}
-                </Typography>
+                    <Divider
+                        sx={{
+                            backgroundColor: '#10EF7C',
+                            width: '100%',
+                            marginTop: 1.5
+                        }}
+                    />
+                </Box>
             )}
         </Box>
     )
