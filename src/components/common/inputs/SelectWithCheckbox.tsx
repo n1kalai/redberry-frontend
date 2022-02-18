@@ -22,7 +22,7 @@ const StyledAutoComplete = styled(Autocomplete)({
 type Props = {
     name: string
     onChange: (_: any) => void
-    value: string[]
+    value: string[] | string
 }
 
 export default function CheckboxesTags({ name, onChange, value }: Props) {

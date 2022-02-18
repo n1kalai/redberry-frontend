@@ -7,7 +7,8 @@ type Props = {
     accept: string
     maxFiles?: number
     multiple?: boolean
-    onDrop: (_: {target: {name:string;value:File}}) => void
+    hasPdf?: boolean
+    onDrop: (_: { target: { name: string; value: File } }) => void
     error?: string
 }
 
@@ -33,6 +34,7 @@ export const DropZone = ({
     accept,
     multiple = false,
     maxFiles = 1,
+    hasPdf,
     onDrop,
     error
 }: Props) => {
@@ -40,7 +42,8 @@ export const DropZone = ({
         accept,
         multiple,
         maxFiles,
-        onDrop: (files: File[]) => onDrop({target: {name: "cv",value: files[0]}})
+        onDrop: (files: File[]) =>
+            onDrop({ target: { name: 'cv', value: files[0] } })
     })
 
     return (
@@ -69,38 +72,48 @@ export const DropZone = ({
             >
                 Required
             </Typography>
-            {acceptedFiles.length > 0 && <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-                alignItems="flex-start"
-                mt={2}
-            >
-                <Box display="flex" justifyContent="space-between" width="100%">
-                    <Box display="flex">
-                        <PDFIcon />
-                        <Typography
-                            variant="body2"
-                            style={{ marginLeft: 8, fontWeight: 600 }}
+            {acceptedFiles.length > 0 ||
+                (hasPdf && (
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                        mt={2}
+                    >
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            width="100%"
                         >
-                            {acceptedFiles[0]?.name}
-                        </Typography>
+                            <Box display="flex">
+                                <PDFIcon />
+                                <Typography
+                                    variant="body2"
+                                    style={{ marginLeft: 8, fontWeight: 600 }}
+                                >
+                                    {acceptedFiles[0]?.name}
+                                </Typography>
+                            </Box>
+                            <Box display="flex" alignItems="center">
+                                <Typography
+                                    variant="body2"
+                                    style={{ marginRight: 8 }}
+                                >
+                                    Done
+                                </Typography>
+                                <CloseIcon fill="red" />
+                            </Box>
+                        </Box>
+                        <Divider
+                            sx={{
+                                backgroundColor: '#10EF7C',
+                                width: '100%',
+                                marginTop: 1.5
+                            }}
+                        />
                     </Box>
-                    <Box display="flex" alignItems="center">
-                        <Typography variant="body2" style={{ marginRight: 8 }}>
-                            Done
-                        </Typography>
-                        <CloseIcon fill="red" />
-                    </Box>
-                </Box>
-                <Divider
-                    sx={{
-                        backgroundColor: '#10EF7C',
-                        width: '100%',
-                        marginTop: 1.5
-                    }}
-                />
-            </Box>}
+                ))}
             {Boolean(error) && (
                 <Typography
                     style={{ marginTop: 4 }}

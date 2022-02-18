@@ -1,6 +1,9 @@
 import styled from '@emotion/styled'
 import { Box, Typography } from '@mui/material'
+import moment from 'moment'
 import { memo } from 'react'
+import { useParams } from 'react-router-dom'
+import { getApplicant } from 'service/endPoints'
 
 const TimelineDiv = styled(Box)({
     position: 'relative',
@@ -34,6 +37,16 @@ const SecTimeLineDiv = styled(Box)({
 })
 
 export const TimeLine = memo(() => {
+    const { id } = useParams()
+    const { isLoading, data } = getApplicant(id)
+
+    const { createdAt, updatedAt } = data?.data || {
+        createdAt: new Date(),
+        updatedAt: Date.now()
+    }
+
+    console.log('updatedAt', updatedAt)
+
     return (
         <Box
             display="flex"
@@ -55,7 +68,7 @@ export const TimeLine = memo(() => {
                     variant="body2"
                     style={{ fontFamily: 'Inter' }}
                 >
-                    Nov 3, 2021, 2:29PM
+                    {moment(createdAt).format('lll')}
                 </Typography>
             </TimelineDiv>
             <SecTimeLineDiv>
@@ -71,7 +84,9 @@ export const TimeLine = memo(() => {
                     variant="body2"
                     style={{ fontFamily: 'Inter' }}
                 >
-                    5 days ago 6:00PM
+                    {moment(updatedAt, 'YYYYMMDD').fromNow() +
+                        ' ' +
+                        moment(updatedAt).format('LT')}
                 </Typography>
             </SecTimeLineDiv>
         </Box>

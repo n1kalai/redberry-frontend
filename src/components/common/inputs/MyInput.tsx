@@ -9,6 +9,8 @@ type Props = {
     error?: string
     value: string
     touched: boolean | undefined
+    isEditing?: boolean
+    onFiledUpdate?: () => void
     onChange: (_: ChangeEvent<HTMLInputElement>) => void
     onBlur: (_: ChangeEvent<HTMLInputElement>) => void
 }
@@ -52,7 +54,9 @@ export const MyInput = ({
     value,
     error,
     touched,
-    onBlur
+    onBlur,
+    isEditing = false,
+    onFiledUpdate
 }: Props) => {
     return (
         <StyledBox>
@@ -69,29 +73,32 @@ export const MyInput = ({
                 <label htmlFor={name} className="pencilIcon">
                     <EditIcon />
                 </label>
-                <div className="editIcons">
-                    <IconButton
-                        style={{
-                            background: '#E6E6E7',
-                            height: 17,
-                            width: 17,
-                            marginInline: 8
-                        }}
-                        size="small"
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <IconButton
-                        style={{
-                            background: 'black',
-                            height: 17,
-                            width: 17
-                        }}
-                        size="small"
-                    >
-                        <SuccessIcon />
-                    </IconButton>
-                </div>
+                {isEditing && (
+                    <div className="editIcons">
+                        <IconButton
+                            style={{
+                                background: '#E6E6E7',
+                                height: 17,
+                                width: 17,
+                                marginInline: 8
+                            }}
+                            size="small"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <IconButton
+                            style={{
+                                background: 'black',
+                                height: 17,
+                                width: 17
+                            }}
+                            size="small"
+                            onClick={onFiledUpdate}
+                        >
+                            <SuccessIcon />
+                        </IconButton>
+                    </div>
+                )}
             </Box>
             {error && touched && (
                 <Typography

@@ -1,6 +1,8 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 import { Box, Typography } from '@mui/material'
+import { getApplicant } from 'service/endPoints'
+import { useParams } from 'react-router-dom'
 
 const WrapperBox = styled(Box)({
     fontFamily: 'Inter',
@@ -24,11 +26,19 @@ const WrapperBox = styled(Box)({
 })
 
 export const Hgroup = memo(() => {
+    const { id } = useParams()
+    const { data } = getApplicant(id)
+    const { firstName, lastName } = data?.data || {
+        firstName: '',
+        lastName: ''
+    }
     return (
         <WrapperBox component="hgroup">
             <Typography variant="h6">Recruitement Pipeline</Typography>
             <Typography variant="h5">Candidate Details</Typography>
-            <Typography variant="h6">Nikoloz Palagashvili</Typography>
+            <Typography style={{ textTransform: 'capitalize' }} variant="h6">
+                {firstName + ' ' + lastName}
+            </Typography>
         </WrapperBox>
     )
 })

@@ -1,15 +1,17 @@
 import styled from '@emotion/styled'
-import { Box, IconButton } from '@mui/material'
+import { Box, IconButton, LinearProgress } from '@mui/material'
 import { GearIcon } from 'components/common/icons'
+import { getStatusCounts } from 'service/endPoints'
 
-const tags = [
-    'All',
-    'First Contact',
-    'Interview',
-    'Tech Assignment',
-    'Rejected',
-    'Hired'
-]
+const tags = {
+    all: 'All',
+    initial: 'Initial',
+    interview: 'Interview',
+    firstContact: 'First Contact',
+    techAssignment: 'Tech Assignment',
+    rejected: 'Rejected',
+    hired: 'Hired'
+}
 
 const WrapperBox = styled(Box)({
     display: 'flex',
@@ -31,23 +33,50 @@ const WrapperBox = styled(Box)({
     }
 })
 
-export const FilterTags = () => {
+type TagType = keyof typeof tags
+
+type Props = {
+    setFilteredByStatus: (_: string) => void
+    filteredByStatus: string | undefined
+}
+
+export const FilterTags = ({
+    setFilteredByStatus,
+    filteredByStatus
+}: Props) => {
+    const { isLoading, isError, data } = getStatusCounts()
+    if (isLoading) return <LinearProgress />
+    if (isError) return <Box>Something went wrong</Box>
     return (
         <Box display="flex" justifyContent="space-between" alignItems="center">
             <WrapperBox component="ul" display="flex">
-                {tags.map(tag => (
+                {Object.keys(tags).map(tag => (
                     <Box
+                        onClick={() =>
+                            setFilteredByStatus(tags[tag as TagType])
+                        }
                         component="li"
                         key={tag}
                         display="flex"
                         style={{
                             opacity: 0.7,
-                            fontSize: '1.2rem',
+                            fontSize: '1rem',
                             cursor: 'pointer'
                         }}
                     >
-                        <Box paddingRight={1}> {tag} </Box>
-                        <Box className="badge"> 5 </Box>
+                        <Box
+                            paddingRight={1}
+                            style={{
+                                textShadow:
+                                    filteredByStatus === tags[tag as TagType]
+                                        ? '0.1px 0 0.1px'
+                                        : 'none'
+                            }}
+                        >
+                            {' '}
+                            {tags?.[tag as TagType]}{' '}
+                        </Box>
+                        <Box className="badge"> {data?.data[tag]} </Box>
                     </Box>
                 ))}
             </WrapperBox>

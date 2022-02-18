@@ -1,7 +1,12 @@
 import { Box, TextField } from '@mui/material'
 import { DatePicker } from 'components/common/DatePicker'
+import { ChangeEvent } from 'react'
 
-export const SearchAndCalendar = () => {
+type Props = {
+    handleSearch: (_: ChangeEvent<HTMLInputElement>) => void
+}
+
+export const SearchAndCalendar = ({ handleSearch }: Props) => {
     return (
         <Box display="flex" mt={5}>
             <Box width="82%" pr={3}>
@@ -10,6 +15,7 @@ export const SearchAndCalendar = () => {
                     fullWidth
                     label="Search with name & last name, skills, position, phone and email"
                     variant="outlined"
+                    onChange={handleSearch}
                     InputProps={{
                         style: {
                             backgroundColor: 'white'

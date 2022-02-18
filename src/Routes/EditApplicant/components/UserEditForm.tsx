@@ -1,19 +1,22 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { getApplicant } from 'service/endPoints'
+
+import { Formik } from 'formik'
+import { Box, Snackbar } from '@mui/material'
 
 import { DropZone } from 'components/common/inputs/DropZone'
-import { Formik } from 'formik'
-
-import { Box, Button, CircularProgress, Snackbar } from '@mui/material'
-
 import { MyInput } from 'components/common/inputs/MyInput'
 import CheckboxesTags from 'components/common/inputs/SelectWithCheckbox'
-import { StatusToggler } from './StatusToggle'
-import { createApplicant } from 'service/endPoints'
 
+import { StatusToggler } from 'Routes/CreateApplicant/components/StatusToggle'
 import { validate } from 'utils/validateuserform'
 
-export const UserInfoForm = () => {
-    const [applicantForm] = useState({
+export const UserEditForm = () => {
+    const { id } = useParams()
+    const { data } = getApplicant(id)
+
+    const { skills, firstName, lastName, pdf, ...rest } = data?.data || {
         fullName: '',
         phone: '',
         email: '',
@@ -23,8 +26,10 @@ export const UserInfoForm = () => {
         skills: [],
         linkedInURL: '',
         status: 'Initial',
+        pdf: undefined,
         cv: null
-    })
+    }
+
     const [newApplicant, setNewApplicant] = useState({
         open: false,
         loading: false,
@@ -33,56 +38,16 @@ export const UserInfoForm = () => {
 
     return (
         <Formik
-            initialValues={applicantForm}
-            validate={validate}
-            onSubmit={async values => {
-                const { fullName, ...rest } = values
-
-                const [firstName, lastName] = fullName.split(' ')
-
-                const fd = new FormData()
-
-                fd.append('firstName', firstName)
-                fd.append('lastName', lastName)
-
-                for (let x in rest) {
-                    //@ts-ignore
-                    fd.append(x, rest[x])
-                }
-                try {
-                    setNewApplicant({
-                        loading: true,
-                        open: false,
-                        text: ''
-                    })
-                    await createApplicant(fd)
-                    setNewApplicant({
-                        loading: false,
-                        open: true,
-                        text: 'Applicant created.'
-                    })
-                } catch (err: any) {
-                    setNewApplicant({
-                        loading: false,
-                        open: true,
-                        text: err.message
-                    })
-                }
+            onSubmit={() => {}}
+            initialValues={{
+                ...rest,
+                skills: typeof skills === 'string' ? skills.split(',') : skills,
+                fullName: firstName + ' ' + lastName
             }}
+            validate={validate}
         >
-            {({
-                handleSubmit,
-                handleChange,
-                handleBlur,
-                values,
-                errors,
-                touched
-            }) => (
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    encType="multipart/form-data"
-                >
+            {({ handleChange, handleBlur, values, errors, touched }) => (
+                <Box component="form" encType="multipart/form-data">
                     <Snackbar
                         open={newApplicant.open}
                         message={newApplicant.text}
@@ -112,6 +77,7 @@ export const UserInfoForm = () => {
                             touched={touched.fullName}
                             error={errors.fullName}
                             onBlur={handleBlur}
+                            isEditing
                         />
                         <MyInput
                             title="Email"
@@ -121,6 +87,7 @@ export const UserInfoForm = () => {
                             touched={touched.email}
                             error={errors.email}
                             onBlur={handleBlur}
+                            isEditing
                         />
                         <MyInput
                             title="Phone number"
@@ -130,6 +97,7 @@ export const UserInfoForm = () => {
                             touched={touched.phone}
                             error={errors.phone}
                             onBlur={handleBlur}
+                            isEditing
                         />
                         <MyInput
                             title="Salary"
@@ -139,6 +107,7 @@ export const UserInfoForm = () => {
                             touched={touched.salaryRange}
                             error={errors.salaryRange}
                             onBlur={handleBlur}
+                            isEditing
                         />
                         <MyInput
                             title="LinkedIn Url"
@@ -148,6 +117,7 @@ export const UserInfoForm = () => {
                             touched={touched.linkedInURL}
                             error={errors.linkedInURL}
                             onBlur={handleBlur}
+                            isEditing
                         />
 
                         <CheckboxesTags
@@ -164,6 +134,7 @@ export const UserInfoForm = () => {
                             touched={touched.position}
                             error={errors.position}
                             onBlur={handleBlur}
+                            isEditing
                         />
                         <MyInput
                             title="Years of experience"
@@ -177,19 +148,9 @@ export const UserInfoForm = () => {
                         <DropZone
                             accept="application/pdf"
                             onDrop={handleChange}
-                            error={errors.cv}
+                            error={errors.pdf}
+                            hasPdf
                         />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="success"
-                            {...(newApplicant.loading
-                                ? { endIcon: <CircularProgress size="small" /> }
-                                : {})}
-                            style={{ marginTop: 16 }}
-                        >
-                            Submit
-                        </Button>
                     </Box>
                 </Box>
             )}
